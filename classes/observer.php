@@ -7,29 +7,45 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+include_once($CFG->dirroot . '/local/extendednotifs/lib_extendednotifs.php');
+
 class local_extendednotifs_observer {
-    public static function course_module_created(\core\event\course_module_created  $event) {
+    public static function course_module_created(\core\event\course_module_created $event) {
         global $USER;
 
         /*
             $event->objectid => Module id
             $event->courseid => Obviously the course id
         */
-        $message = new \core\message\message();
-        $message->component = 'local_extendednotifs';
-        $message->name = 'cm_created_notification';
-        $message->userfrom = $USER;
-        $message->userto = 2;
-        $message->subject = 'course_module_created';
-        $message->fullmessage = 'course_module_created';
-        $message->fullmessageformat = FORMAT_MARKDOWN;
-        $message->fullmessagehtml = '<p>course_module_Created</p>';
-        $message->smallmessage = 'course_module_created';
-        $message->contexturl = 'http://GalaxyFarFarAway.com';
-        $message->contexturlname = 'Context name';
-        $message->replyto = "random@example.com";
-        $message->courseid = 2;
+        $users = extendednotifs_get_students_in_course($event->courseid);
+        list($course, $cm) = get_course_and_cm_from_cmid($event->objectid);
 
-        message_send($message);
+        $msg = [
+            'subject' => 'New Module: ' . $course->shortname,
+            'smallmessage' => 'New Module: ' . $course->shortname,
+            'fullmessage' => "'" . $cm->name . '\' was recently created in ' . $course->shortname,
+            'fullmessagehtml' => '<p>\'' . $cm->name . '\'was recently created created in ' . $course->shortname,
+            'contexturl' => $cm->url,
+            'contexturlname' => $cm->name
+        ];
+
+        foreach ($users as $user) {
+            $message = new \core\message\message();
+            $message->component = 'local_extendednotifs';
+            $message->name = 'cmcreated_notification';
+            $message->courseid = $course->id;
+            $message->modulename = $cm->name;
+            $message->userfrom = $USER;
+            $message->userto = $user;
+            $message->subject = $msg['subject'];
+            $message->smallmessage = $msg['smallmessage'];
+            $message->fullmessage = $msg['fullmessage'];
+            $message->fullmessageformat = FORMAT_MARKDOWN;
+            $message->fullmessagehtml = $msg['fullmessagehtml'];
+            $message->smallmessage = $msg['smallmessage'];
+            $message->contexturl = $msg['contexturl'];
+            $message->contexturlname = $msg['contexturlname'];
+            message_send($message);
+        }
     }
 }

@@ -9,4 +9,4 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'Extended Notifications';
 
-$string['messageprovider:cm_created_notification'] = 'Course Module notifications';
+$string['messageprovider:cmcreated_notification'] = 'Course Module notifications';
