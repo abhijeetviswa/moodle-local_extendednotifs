@@ -1,4 +1,9 @@
 <?php
+/**
+ * @package    local_extendednotifs
+ * @copyright  2020 Abhijeet Viswa
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 function extendednotifs_get_students_in_course($courseid): array {
     global $DB;
