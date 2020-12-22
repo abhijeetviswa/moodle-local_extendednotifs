@@ -34,11 +34,11 @@ class send_new_cm_notifications extends \core\task\adhoc_task
         }
 
         $msg = [
-            'subject' => 'New Module: ' . $course->shortname,
-            'smallmessage' => 'New Module: ' . $course->shortname,
-            'fullmessage' => "'" . $cm->name . '\' was recently created in ' . $course->shortname,
+            'subject' => $course->shortname . ': New Module Added',
+            'smallmessage' => '"' . $cm->name . '" was recently created in ' . $course->shortname,
+            'fullmessage' => '"' . $cm->name . '" was recently created in ' . $course->shortname,
             'fullmessagehtml' => '<p>\'' . $cm->name . '\'was recently created created in ' . $course->shortname,
-            'contexturl' => $cm->url,
+            'contexturl' => (string) $cm->url,
             'contexturlname' => $cm->name
         ];
 
@@ -53,7 +53,7 @@ class send_new_cm_notifications extends \core\task\adhoc_task
             $message->subject = $msg['subject'];
             $message->smallmessage = $msg['smallmessage'];
             $message->fullmessage = $msg['fullmessage'];
-            $message->fullmessageformat = FORMAT_MARKDOWN;
+            $message->fullmessageformat = FORMAT_HTML;
             $message->fullmessagehtml = $msg['fullmessagehtml'];
             $message->smallmessage = $msg['smallmessage'];
             $message->contexturl = $msg['contexturl'];
