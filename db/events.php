@@ -8,9 +8,12 @@
 defined('MOODLE_INTERNAL') || die();
 
 $observers = array(
-    // Handle attempt submitted event, as a way to send confirmation messages asynchronously.
     array(
         'eventname'   => 'core\event\course_module_created',
         'callback'    => 'local_extendednotifs_observer::course_module_created',
+    ),
+    array(
+        'eventname'   => 'core\event\course_section_updated',
+        'callback'    => 'local_extendednotifs_observer::course_section_updated',
     ),
 );

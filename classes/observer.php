@@ -21,4 +21,16 @@ class local_extendednotifs_observer {
         $task->set_userid($USER->id);
         \core\task\manager::queue_adhoc_task($task);
     }
+
+    public static function course_section_updated(\core\event\course_section_updated $event) {
+        global $USER;
+
+        $task = new task\send_coursesectionupdated_notification();
+        $task->set_custom_data([
+            'courseid' => $event->courseid,
+            'sectionnum' => $event->other['sectionnum'],
+        ]);
+        $task->set_userid($USER->id);
+        \core\task\manager::queue_adhoc_task($task);
+    }
 }

@@ -7,12 +7,12 @@ use moodle\moodle_exception;
 include_once($CFG->dirroot . '/local/extendednotifs/lib_extendednotifs.php');
 
 /**
- * Class check_for_updates
- * @package local_extendednotifs
- * @copyright 2020 Abhijeet Viswa
+ * Sends notifications for new course modules
+ * @package    local_extendednotifs
+ * @copyright  2020 Abhijeet Viswa
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class send_new_cm_notifications extends \core\task\adhoc_task
+class send_cmcreatednotification extends \core\task\adhoc_task
 {
     public function execute()
     {
