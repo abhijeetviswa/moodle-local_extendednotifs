@@ -12,7 +12,7 @@ include_once($CFG->dirroot . '/local/extendednotifs/lib_extendednotifs.php');
  * @copyright  2020 Abhijeet Viswa
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class send_cmcreatednotification extends \core\task\adhoc_task
+class send_cmcreated_notification extends \core\task\adhoc_task
 {
     public function execute()
     {
@@ -33,31 +33,30 @@ class send_cmcreatednotification extends \core\task\adhoc_task
             return; // module or course doesn't exist, don't bother continuing
         }
 
-        $msg = [
-            'subject' => $course->shortname . ': New Module Added',
-            'smallmessage' => '"' . $cm->name . '" was recently created in ' . $course->shortname,
-            'fullmessage' => '"' . $cm->name . '" was recently created in ' . $course->shortname,
-            'fullmessagehtml' => '<p>\'' . $cm->name . '\'was recently created created in ' . $course->shortname,
-            'contexturl' => (string) $cm->url,
-            'contexturlname' => $cm->name
-        ];
+       $subject = $course->shortname . ': New Module Added';
+       $smallmessage = '"' . $cm->name . '" was recently created in ' . $course->shortname;
+       $fullmessage = '"' . $cm->name . '" was recently created in ' . $course->shortname;
+       $fullmessagehtml = '<p>\'' . $cm->name . '\'was recently created created in ' . $course->shortname;
+       $contexturl = (string) $cm->url;
+       $contexturlname = $cm->name;
+
+        $message = new \core\message\message();
+        $message->component = 'local_extendednotifs';
+        $message->name = 'cmcreated_notification';
+        $message->courseid = $course->id;
+        $message->modulename = $cm->name;
+        $message->userfrom = $USER;
+        $message->subject = $subject;
+        $message->smallmessage = $smallmessage;;
+        $message->fullmessage = $fullmessage;
+        $message->fullmessageformat = FORMAT_HTML;
+        $message->fullmessagehtml = $fullmessagehtml;
+        $message->smallmessage = $smallmessage;
+        $message->contexturl = $contexturl;
+        $message->contexturlname = $contexturlname;
 
         foreach ($students as $user) {
-            $message = new \core\message\message();
-            $message->component = 'local_extendednotifs';
-            $message->name = 'cmcreated_notification';
-            $message->courseid = $course->id;
-            $message->modulename = $cm->name;
-            $message->userfrom = $USER;
             $message->userto = $user;
-            $message->subject = $msg['subject'];
-            $message->smallmessage = $msg['smallmessage'];
-            $message->fullmessage = $msg['fullmessage'];
-            $message->fullmessageformat = FORMAT_HTML;
-            $message->fullmessagehtml = $msg['fullmessagehtml'];
-            $message->smallmessage = $msg['smallmessage'];
-            $message->contexturl = $msg['contexturl'];
-            $message->contexturlname = $msg['contexturlname'];
             message_send($message);
         }
     }

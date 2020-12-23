@@ -13,7 +13,7 @@ class local_extendednotifs_observer {
     public static function course_module_created(\core\event\course_module_created $event) {
         global $USER;
 
-        $task = new task\send_new_cm_notifications();
+        $task = new task\send_cmcreated_notification();
         $task->set_custom_data([
             'courseid' => $event->courseid,
             'cmid' => $event->objectid,

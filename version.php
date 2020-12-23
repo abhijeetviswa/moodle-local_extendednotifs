@@ -7,7 +7,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2020122304;
+$plugin->version   = 2020122305;
 $plugin->release   = "0.0.1";
 $plugin->requires  = 2018051715; // 3.5.15
 $plugin->component = 'local_extendednotifs';
